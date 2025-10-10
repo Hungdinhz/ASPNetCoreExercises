@@ -1,0 +1,16 @@
+﻿@model IEnumerable<thuchanh1_231230796.Models.Product>
+
+<div class="row">
+    @foreach (var p in Model)
+    {
+        <div class="col-md-4 mb-4">
+            @* col-md-4 => 3 cột trên 1 hàng *@
+            <div class="card h-100 text-center border">
+                <img src="@Url.Content(p.ImageUrl)" class="card-img-top img-fluid" />
+                <div class="card-body">
+                    <p class="card-text">@p.Name</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
