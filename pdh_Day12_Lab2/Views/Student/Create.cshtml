@@ -1,0 +1,68 @@
+﻿@model pdh_Day12_Lab2.Models.Student
+@{
+    ViewData["Title"] = "Thêm sinh viên mới";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+
+<h2 class="text-center mb-4">Thêm sinh viên mới</h2>
+
+<form asp-action="Create" method="post" class="w-75 mx-auto border rounded p-4 shadow">
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Họ và tên</label>
+        <input asp-for="Name" class="form-control" placeholder="Nhập họ tên sinh viên" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Giới tính</label>
+        <div>
+            @foreach (var gender in ViewBag.AllGenders)
+            {
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="Gender" value="@gender" id="@gender" />
+                    <label class="form-check-label" for="@gender">@gender</label>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Branch" class="form-label">Ngành học</label>
+        <select asp-for="Branch" class="form-select" asp-items="ViewBag.AllBranches">
+            <option value="">-- Chọn ngành --</option>
+        </select>
+        <span asp-validation-for="Branch" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label">Email</label>
+        <input asp-for="Email" class="form-control" placeholder="Ví dụ: abc@gmail.com" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label">Mật khẩu</label>
+        <input asp-for="Password" type="password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsRegular" class="form-check-input" />
+        <label asp-for="IsRegular" class="form-check-label">Sinh viên chính quy</label>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Address" class="form-label">Địa chỉ</label>
+        <input asp-for="Address" class="form-control" placeholder="Nhập địa chỉ" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DateOfBorth" class="form-label">Ngày sinh</label>
+        <input asp-for="DateOfBorth" type="date" class="form-control" />
+    </div>
+
+    <div class="text-center">
+        <button type="submit" class="btn btn-success px-4">Lưu</button>
+        <a asp-action="Index" class="btn btn-secondary px-4 ms-2">Hủy</a>
+    </div>
+</form>

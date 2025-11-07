@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Student>
+
+@{   ViewData["Title"] = "Student List";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+<h1 class="text-center mt-4">@ViewData["Title"]</h1>
+<a asp-action="Create" class="btn btn-primary mb-3">Add New Student</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Branch</th>
+            <th>Email</th>
+            <th>Regular</th>
+            <th>Birthday</th>
+            <th>Address</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.Id</td>
+                <td>@s.Name</td>
+                <td>@s.Gender</td>
+                @{
+                    string str = "";
+                    switch(s.Branch)
+                    {
+                        case Branch.IT:
+                            str = "Công nghệ thông tin";
+                            break;
+                        case Branch.BE:
+                            str = "Kinh tế";
+                            break;
+                        case Branch.CE:
+                            str = "Công trình";
+                            break;
+                        case Branch.EE:
+                            str = "Điện - Điện tử";
+                            break;
+                        default:
+                            str = "Khác";
+                            break;
+                    }
+                }
+
+                <td>@str</td>
+                <td>@s.Email</td>
+                <td>@(s.IsRegular ? "Chính quy" : "Tại chức")</td>
+                <td>@s.DateOfBorth.ToString("dd/MM/yyyy")</td>
+                <td>@s.Address</td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+@section Scripts {
+    <script>
+        var table = document.querySelector("table");
+        table.onclick = function onTableClick() {
+            table.style.backgroundColor = "yellow";
+        }
+    </script>
+}
+
+
+
+
+

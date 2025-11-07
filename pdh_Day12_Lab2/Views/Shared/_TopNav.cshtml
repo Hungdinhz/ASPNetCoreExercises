@@ -1,0 +1,43 @@
+﻿<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <!-- Logo hoặc tên website -->
+        <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
+            🧑‍🎓 PDH Student App
+        </a>
+
+        <!-- Nút bật/tắt menu khi thu nhỏ màn hình -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menu trái -->
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">Trang chủ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Student" asp-action="Index">Sinh viên</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Student" asp-action="Create">Thêm mới</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Student" asp-action="AboutMe">Giới thiệu</a>
+                </li>
+            </ul>
+
+            <!-- Ô tìm kiếm bên phải -->
+            <form class="d-flex" asp-controller="Student" asp-action="Index" method="get">
+                <input class="form-control me-2" type="search" name="query" placeholder="Tìm sinh viên..." aria-label="Search">
+                <button class="btn btn-light text-primary" type="submit">Tìm</button>
+            </form>
+
+            <!-- Góc phải -->
+            <span class="navbar-text text-white ms-3">
+                Xin chào, <strong>Admin</strong>
+            </span>
+        </div>
+    </div>
+</nav>
