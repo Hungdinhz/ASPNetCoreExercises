@@ -1,10 +1,14 @@
-﻿using pdh_Day12_Lab2.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using pdh_Day12_Lab2.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace pdh_Day12_Lab2.ViewComponents
 {
-    public class RenderViewComponent
+    // ✅ Phải kế thừa ViewComponent
+    public class RenderViewComponent : ViewComponent
     {
-        private List<MenuItem> menuItems = new List<MenuItem>();
+        private readonly List<MenuItem> menuItems = new List<MenuItem>();
 
         public RenderViewComponent()
         {
@@ -14,6 +18,11 @@ namespace pdh_Day12_Lab2.ViewComponents
             menuItems.Add(new MenuItem { Id = 4, Name = "About Me", Link = "/Student/AboutMe" });
         }
 
-
+        // ✅ Chỉ cần 1 trong 2 hàm Invoke hoặc InvokeAsync (nên dùng InvokeAsync)
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            // Có thể bỏ async nếu không cần await
+            return View("RenderLeftMenu", menuItems);
+        }
     }
 }
