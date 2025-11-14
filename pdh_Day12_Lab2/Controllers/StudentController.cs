@@ -22,7 +22,8 @@ namespace pdh_Day12_Lab1.Controllers
                     Password = "123456",
                     IsRegular = true,
                     Address = "Ha Noi",
-                    DateOfBorth = new DateTime(2002, 5, 10)
+                    DateOfBorth = new DateTime(2002, 5, 10),
+                    Diem = 8.5
                 },
                 new Student()
                 {
@@ -34,7 +35,8 @@ namespace pdh_Day12_Lab1.Controllers
                     Password = "654321",
                     IsRegular = false,
                     Address = "Hai Phong",
-                    DateOfBorth = new DateTime(2003, 8, 21)
+                    DateOfBorth = new DateTime(2003, 8, 21),
+                    Diem = 9.0
                 },
                 new Student()
                 {
@@ -46,7 +48,8 @@ namespace pdh_Day12_Lab1.Controllers
                     Password = "abc123",
                     IsRegular = true,
                     Address = "Da Nang",
-                    DateOfBorth = new DateTime(2001, 11, 2)
+                    DateOfBorth = new DateTime(2001, 11, 2),
+                    Diem = 7.5
                 },
                 new Student()
                 {
@@ -58,7 +61,8 @@ namespace pdh_Day12_Lab1.Controllers
                     Password = "design2024",
                     IsRegular = true,
                     Address = "Hue",
-                    DateOfBorth = new DateTime(2004, 3, 14)
+                    DateOfBorth = new DateTime(2004, 3, 14),
+                    Diem = 8.0
                 },
                 new Student()
                 {
@@ -70,7 +74,8 @@ namespace pdh_Day12_Lab1.Controllers
                     Password = "mk123",
                     IsRegular = false,
                     Address = "Ho Chi Minh City",
-                    DateOfBorth = new DateTime(2002, 12, 25)
+                    DateOfBorth = new DateTime(2002, 12, 25),
+                    Diem = 6.5
                 }
             };
 
@@ -106,10 +111,23 @@ namespace pdh_Day12_Lab1.Controllers
         [HttpPost]
         public IActionResult Create(Student s)
         {
+            if (ModelState.IsValid)
+            {
+                s.Id = students.Max(st => st.Id) + 1;
+                students.Add(s);
+                return View("Index", students);
+            }
+            ViewBag.AllGenders = Enum.GetValues(typeof(Gender)).Cast<Gender>().ToList();
 
-            s.Id = students.Max(st => st.Id) + 1;
-            students.Add(s);
-            return View("Index", students);
+            ViewBag.AllBranches = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "Information Technology", Value = Branch.IT.ToString() },
+                new SelectListItem { Text = "Kinh tế", Value = Branch.BE.ToString() },
+                new SelectListItem { Text = "Công trình", Value = Branch.CE.ToString() },
+                new SelectListItem { Text = "Diện tử", Value = Branch.EE.ToString() }
+            };
+            return View();
+            
         }
 
 
