@@ -19,10 +19,36 @@ namespace pdh_Day14_Lab4.Controllers
         }
 
         // GET: Learners
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    var schoolContext = _context.Learners.Include(l => l.Major);
+        //    return View(await schoolContext.ToListAsync());
+        //}
+
+        public IActionResult Index(int? majorId)
         {
-            var schoolContext = _context.Learners.Include(l => l.Major);
-            return View(await schoolContext.ToListAsync());
+            if (majorId == null || majorId == 0)
+            {
+                var allLearners = _context.Learners.Include(l => l.Major).ToList();
+                return View(allLearners);
+            }
+            else
+            {
+                var filteredLearners = _context.Learners
+                    .Where(l => l.MajorID == majorId)
+                    .Include(l => l.Major)
+                    .ToList();
+                return View(filteredLearners);
+            }
+        }
+
+        public IActionResult LearnerByMajorId(int majorId)
+        {
+            var learners = _context.Learners
+                .Where(l => l.MajorID == majorId)
+                .Include(l => l.Major)
+                .ToList();
+            return PartialView("LearnerTable", learners);
         }
 
         // GET: Learners/Details/5
