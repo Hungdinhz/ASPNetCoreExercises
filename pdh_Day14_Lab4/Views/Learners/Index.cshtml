@@ -13,6 +13,17 @@
 <div class="ms-2 mx-2">
     <h1>Learner list</h1>
     @await Component.InvokeAsync("Major")
+
+    <!-- Them form tim kiem-->
+    <form action="/" method="post" class="d-none d-md-inline-block form-check-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+        <div class="input-group">
+            <input id="keyword" class="form-control" name="keyword" type="text" placeholder="Search learner"/>
+            <button id="btnSearch" class="btn btn-primary" type="button">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </form>
+
     <div id="content">
         <table class="table table-striped">
             <thead>
@@ -38,14 +49,29 @@
                 }
             </tbody>
         </table>
+        <!--Phan trang-->
+        <ul class="pagination">
+            @for (int i = 1; i <= ViewBag.pageNum; i++)
+            {
+                <li class="page-item"
+                    data-page="@i"
+                    data-major=@(ViewBag.MajorId != null ? $"majorId='{ViewBag.MajorId}'" : "")
+                    data-keyword=@(ViewBag.Keyword != null ? $"keyword='{ViewBag.Keyword}'" : null)>
+                    <a class="page-link">@i</a>
+                </li>
+            }
+        </ul>
+
     </div>
     <a asp-action="Create" class="btn btn-primary">Create New Student</a>
 </div>
 
 @section Scripts {
     <script>
-        $("li").click(function () {
-            var majorId = $(this).attr("id");
+        // --- CLICK LỌC THEO MAJOR ---
+        $('body').on('click', 'li.major-item', function () {
+            var majorId = $(this).data("major");
+
             $.ajax({
                 url: '@Url.Action("LearnerByMajorId", "Learners")',
                 type: 'GET',
@@ -58,7 +84,45 @@
                 }
             });
         });
+
+        // --- CLICK PHÂN TRANG ---
+        $('body').on('click', 'li.page-item', function () {
+            var page = $(this).data("page");
+            var majorId = $(this).data("major");
+            var keyword = $(this).data("keyword");
+
+            $.ajax({
+                url: '@Url.Action("LearnerFilter", "Learners")',
+                type: 'GET',
+                data: { majorId: majorId, keyword: keyword, pageIndex: page },
+                success: function (result) {
+                    $('#content').html(result);
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching data: " + error);
+                }
+            });
+        });
+
+        // --- CLICK TÌM KIẾM ---
+        $('body').on('click', '#btnSearch', function () {
+            var keyword = $("#keyword").val();
+            var majorId = $("#majorSelect").val();
+
+            $.ajax({
+                url: '@Url.Action("LearnerFilter", "Learners")',
+                type: 'GET',
+                data: { majorId: majorId, keyword: keyword},
+                success: function (result) {
+                    $('#content').html(result);
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching data: " + error);
+                }
+            });
+        });
     </script>
 }
+
 
 

@@ -25,3 +25,16 @@
         }
     </tbody>
 </table>
+
+<!--Phan trang-->
+<ul class="pagination">
+    @for (int i = 1; i <= ViewBag.pageNum; i++)
+    {
+        <li class="page-item"
+            data-page="@i"
+            data-major=@(ViewBag.MajorId != null ? $"majorId='{ViewBag.MajorId}'" : "")
+            data-keyword=@(ViewBag.Keyword != null ? $"keyword='{ViewBag.Keyword}'" : null)>
+            <a class="page-link">@i</a>
+        </li>
+    }
+</ul>

@@ -12,6 +12,7 @@ namespace pdh_Day14_Lab4.Controllers
     public class LearnersController : Controller
     {
         private readonly SchoolContext _context;
+        private int pageSize = 3;
 
         public LearnersController(SchoolContext context)
         {
@@ -27,19 +28,61 @@ namespace pdh_Day14_Lab4.Controllers
 
         public IActionResult Index(int? majorId)
         {
-            if (majorId == null || majorId == 0)
+            var learners = _context.Learners.Include(l => l.Major);
+
+            if (majorId != null)
             {
-                var allLearners = _context.Learners.Include(l => l.Major).ToList();
-                return View(allLearners);
-            }
-            else
-            {
-                var filteredLearners = _context.Learners
+                learners = _context.Learners
                     .Where(l => l.MajorID == majorId)
-                    .Include(l => l.Major)
-                    .ToList();
-                return View(filteredLearners);
+                    .Include(l => l.Major);
             }
+
+            // Tính toán số trang
+            int pageNum = (int)Math.Ceiling(learners.Count() / (float)pageSize);
+            // Truyền dữ liệu vào ViewBag
+            ViewBag.PageNum = pageNum;
+
+            // lay du lieu trang dau tien
+            var result = learners.Take(pageSize).ToList();
+            return View(result);
+        }
+
+        // Phan trang ket hop loc va tim kiem du lieu
+        public IActionResult LearnerFilter(int? majorId, string keyword, int? pageIndex)
+        {
+            // Lay toan bo learner trong dbset
+            var learners = _context.Learners.AsQueryable();
+
+            // lay chi so trang, neu khong co thi mac dinh la trang 1
+            int page = (int)(pageIndex == null || pageIndex < 1 ? 1 : pageIndex);
+
+            // Loc du lieu theo majorId neu co
+            if (majorId != null)
+            {
+                // Loc du lieu theo majorId
+                learners = learners.Where(l => l.MajorID == majorId);
+                ViewBag.MajorId = majorId;
+            }
+
+            // Tim kiem theo keyword neu co
+            if (keyword != null)
+            {
+                // tim kiem 
+                learners = learners.Where(l => l.FirstMidName.ToLower().Contains(keyword.ToLower()));
+
+                // Truyen keyword ve view de hien thi lai
+                ViewBag.Keyword = keyword;
+            }
+
+            // Tinh toan so trang
+            int pageNum = (int)Math.Ceiling(learners.Count() / (float)pageSize);
+
+            // Truyen du lieu vao ViewBag
+            ViewBag.pageNum = pageNum;
+
+            // Lay du lieu theo trang
+            var result = learners.Skip(pageSize * (page - 1)).Take(pageSize).Include(m => m.Major).ToList();
+            return PartialView("LearnerTable", result);
         }
 
         public IActionResult LearnerByMajorId(int majorId)

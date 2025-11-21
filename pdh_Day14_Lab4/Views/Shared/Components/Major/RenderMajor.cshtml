@@ -18,10 +18,9 @@
     Khong dong bo :  
     @foreach (var major in Model)
     {
-        <li class="nav-item" id="@major.MajorID">
-            <a class="nav-link">
-                @major.MajorName
-            </a>
+        <li class="nav-item major-item" data-major="@major.MajorID">
+            <a class="nav-link">@major.MajorName</a>
         </li>
     }
 </ul>
+
